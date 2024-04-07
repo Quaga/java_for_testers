@@ -4,6 +4,9 @@ public class Rectangle {
     private double a;
     private double b;
     public Rectangle(double a, double b) {
+        if (a < 0 || b < 0){
+            throw new IllegalArgumentException("rect side should be non-negative");
+        }
         this.a = a;
     }
 
