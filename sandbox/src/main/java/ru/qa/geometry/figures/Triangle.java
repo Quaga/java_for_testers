@@ -1,5 +1,7 @@
 package ru.qa.geometry.figures;
 
+import java.util.Arrays;
+
 public class Triangle{
     private double a;
     private double b;
@@ -25,5 +27,23 @@ public class Triangle{
 
     public double perimeter() {
         return this.a + this.b + this.c;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Triangle that = (Triangle) o;
+
+        double[] dimensions1 = { this.a, this.b, this.c };
+        double[] dimensions2 = { this.a, this.b, this.c };
+        Arrays.sort(dimensions1);
+        Arrays.sort(dimensions2);
+        return Arrays.equals(dimensions1, dimensions2);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
     }
 }
