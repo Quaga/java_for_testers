@@ -23,10 +23,11 @@ public class ContactHelper extends HelperBase{
         openContactsPage();
     }
 
-    public void modifyContact(ContactData modifiedContact) {
+    public void modifyContact(ContactData contact, ContactData modifiedContact) {
         openContactsPage();
-        initContactModification();
-        fillContactForm(modifiedContact);
+        selectContact(contact);
+        initContactModification(contact);
+        fillContactName(modifiedContact);
         submitContactModification();
         openContactsPage();
     }
@@ -69,8 +70,13 @@ public class ContactHelper extends HelperBase{
         type(By.name("mobile"), contact.mobile());
     }
 
-    private void initContactModification() {
-        click(By.xpath("//img[@alt=\'Edit\']"));
+    private void fillContactName(ContactData contact) {
+        type(By.name("firstname"), contact.firstName());
+        type(By.name("lastname"), contact.lastName());
+    }
+
+    private void initContactModification(ContactData contact) {
+        click(By.cssSelector(String.format("a[href='edit.php?id=%s']", contact.id())));
     }
 
     private void selectContact(ContactData contact) {
