@@ -36,7 +36,7 @@ public class Triangle{
         Triangle that = (Triangle) o;
 
         double[] dimensions1 = { this.a, this.b, this.c };
-        double[] dimensions2 = { this.a, this.b, this.c };
+        double[] dimensions2 = { that.a, that.b, that.c };
         Arrays.sort(dimensions1);
         Arrays.sort(dimensions2);
         return Arrays.equals(dimensions1, dimensions2);
