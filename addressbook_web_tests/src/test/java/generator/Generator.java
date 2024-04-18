@@ -11,22 +11,21 @@ import model.ContactData;
 import model.GroupData;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class Generator {
-    @Parameter(names = {"--type", "-t"})
-    String type;
+    @Parameter(names = {"--properties", "-p"})
+    String properties_file;
+    private String contact_file;
+    private String group_file;
+    private String format;
+    private int count;
 
-    @Parameter(names = {"--output", "-o"})
-    String output;
-
-    @Parameter(names = {"--format", "-f"})
-    String format;
-
-    @Parameter(names = {"--count", "-n"})
-    int count;
+    private Properties properties;
 
     public static void main(String[] args) throws IOException {
         var generator = new Generator();
@@ -38,18 +37,21 @@ public class Generator {
     }
 
     private void run() throws IOException {
-        var data = generate();
-        save(data);
-    }
+        properties = new Properties();
+        properties.load(new FileReader(System.getProperty("target", properties_file)));
 
-    private Object generate() {
-        if ("contacts".equals(type)) {
-            return generateContacts();
-        } else if ("groups".equals(type)) {
-            return generateGroups();
-        } else {
-            throw new IllegalArgumentException("Unknown data type " + type);
-        }
+        contact_file = properties.getProperty("file.contacts");
+        group_file = properties.getProperty("file.groups");
+        format = properties.getProperty("file.format");
+        count = Integer.parseInt(properties.getProperty("file.count"));
+
+        var contactData = generateContacts();
+        var contactOut = contact_file + "." + format;
+        save(contactData, contactOut);
+
+        var groupData = generateGroups();
+        var groupOut = group_file + "." + format;
+        save(groupData, groupOut);
     }
 
     private Object generateContacts() {
@@ -63,7 +65,7 @@ public class Generator {
                     .withEmail(String.format("%s@%s.ru",
                             CommonFunctions.randomString(i * 4),
                             CommonFunctions.randomString(i * 2)))
-                    .withPhoto(CommonFunctions.randomFile("src/test/resources/images")));
+                    .withPhoto(CommonFunctions.randomFile(properties.getProperty("file.photoDir"))));
         }
         return contacts;
     }
@@ -79,7 +81,7 @@ public class Generator {
         return groups;
     }
 
-    private void save(Object data) throws IOException {
+    private void save(Object data, String output) throws IOException {
         if ("json".equals(format)) {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
