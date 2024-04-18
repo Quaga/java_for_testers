@@ -1,5 +1,6 @@
 package tests;
 
+import common.CommonFunctions;
 import model.ContactData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,14 +15,15 @@ public class ContactModifyTests extends TestBase{
     public void canModifyContact() {
         if (app.contacts().getCount() == 0)
         {
-            app.contacts().createContact(new ContactData("", "last", "first", "address", "email", "mobile"));
+            app.contacts().createContact(new ContactData("", "last", "first", "address", "email", "mobile",
+                    "src/test/resources/images/avatar.png"));
         }
         var oldContacts = app.contacts().getList();
         var rnd = new Random();
         var index = rnd.nextInt(oldContacts.size());
         var testData = new ContactData()
-                .withFirstName(String.format("modified firstname %s", randomString(5)))
-                .withLastName(String.format("modified lastname %s", randomString(5)));
+                .withFirstName(String.format("modified firstname %s", CommonFunctions.randomString(5)))
+                .withLastName(String.format("modified lastname %s", CommonFunctions.randomString(5)));
         app.contacts().modifyContact(oldContacts.get(index), testData);
         var newContacts = app.contacts().getList();
         var expectedList = new ArrayList<>(oldContacts);
