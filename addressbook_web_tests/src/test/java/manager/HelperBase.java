@@ -1,6 +1,7 @@
 package manager;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import java.nio.file.Paths;
 
@@ -14,6 +15,12 @@ public class HelperBase {
 
     protected void click(By locator) {
         manager.driver.findElement(locator).click();
+    }
+
+    protected void click(By locator, By list_locator) {
+        WebElement list = manager.driver.findElement(locator);
+        list.click();
+        list.findElement(list_locator).click();
     }
 
     protected void type(By locator, String text) {

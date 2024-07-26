@@ -3,6 +3,7 @@ package manager;
 import model.ContactData;
 import model.GroupData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,24 @@ public class ContactHelper extends HelperBase{
     public void createContact(ContactData contact) {
         openContactsCreationPage();
         fillContactForm(contact);
-        submitContactCreation();
+        submitContact();
         openContactsPage();
+    }
+
+    public void createContact(ContactData contact, GroupData group) {
+        openContactsCreationPage();
+        fillContactForm(contact);
+        selectGroup(group);
+        submitContact();
+        openContactsPage();
+    }
+
+    private void selectGroup(GroupData group) {
+        new Select(manager.driver.findElement(By.name("new_group"))).selectByValue(group.id());
+    }
+
+    private void selectNewGroup(GroupData group) {
+        click(By.name("to_group"), By.cssSelector(String.format("option[value='%s']", group.id())));
     }
 
     public void removeContact(ContactData contact) {
@@ -28,7 +45,15 @@ public class ContactHelper extends HelperBase{
         selectContact(contact);
         initContactModification(contact);
         fillContactName(modifiedContact);
-        submitContactModification();
+        updateContact();
+        openContactsPage();
+    }
+
+    public void modifyContact(ContactData contact, GroupData group) {
+        openContactsPage();
+        selectContact(contact);
+        selectNewGroup(group);
+        addContact();
         openContactsPage();
     }
 
@@ -46,7 +71,7 @@ public class ContactHelper extends HelperBase{
         return manager.isElementPresent(By.name("selected[]"));
     }
 
-    private void submitContactCreation() {
+    private void submitContact() {
         click(By.name("submit"));
     }
 
@@ -58,7 +83,11 @@ public class ContactHelper extends HelperBase{
         click(By.linkText("home"));
     }
 
-    private void submitContactModification() {
+    private void addContact() {
+        click(By.name("add"));
+    }
+
+    private void updateContact() {
         click(By.name("update"));
     }
 
@@ -88,6 +117,22 @@ public class ContactHelper extends HelperBase{
     public int getCount() {
         openContactsPage();
         return manager.driver.findElements(By.name("selected[]")).size();
+    }
+
+    public void removeGroupFromContact(ContactData contact, GroupData group) {
+        openContactsPage();
+        selectContactByGroup(group);
+        selectContact(contact);
+        removeContact();
+        openContactsPage();
+    }
+
+    private void selectContactByGroup(GroupData group) {
+        click(By.name("group"), By.cssSelector(String.format("option[value='%s']", group.id())));
+    }
+
+    private void removeContact() {
+        click(By.name("remove"));
     }
 
     public List<ContactData> getList() {

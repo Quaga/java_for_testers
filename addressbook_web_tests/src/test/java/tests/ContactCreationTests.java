@@ -3,7 +3,9 @@ package tests;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import common.CommonFunctions;
+import generator.Generator;
 import model.ContactData;
+import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -67,11 +69,26 @@ public class ContactCreationTests extends TestBase{
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newContacts.sort(compareById);
-        var maxId = newContacts.get(newContacts.size() - 1).id();
+        int lastNdx = newContacts.size() - 1;
+        var lastId = newContacts.get(lastNdx).id();
+        var lastPhoto = newContacts.get(lastNdx).photo();
         var expectedList = new ArrayList<>(oldContacts);
-        expectedList.add(contact.withId(maxId).withPhoto(""));
+        expectedList.add(contact.withId(lastId).withPhoto(lastPhoto));
         expectedList.sort(compareById);
         Assertions.assertEquals(newContacts, expectedList);
+    }
+
+    @Test
+    void canCreateContactInGroup() {
+        var contact = new ContactData().withRandomData(2, app.properties().getProperty("file.photoDir"));
+        if (app.hbm().getGroupsCount() == 0) {
+            app.hbm().createGroup(new GroupData().withRandomData(2));
+        }
+        var group = app.hbm().getGroupList().get(0);
+        var oldRelated = app.hbm().getContactsInGroup(group);
+        app.contacts().createContact(contact, group);
+        var newRelated = app.hbm().getContactsInGroup(group);
+        Assertions.assertEquals(oldRelated.size() + 1, newRelated.size());
     }
 
 }

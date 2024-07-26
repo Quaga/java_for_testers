@@ -9,18 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcHelper extends HelperBase {
+    private static String jdbcMysqlUrl;
+    private static String jdbcMysqlUsername;
+    private static String jdbcMysqlPassword;
+
     public JdbcHelper(ApplicationManager manager) {
         super(manager);
+        jdbcMysqlUrl = manager.properties().getProperty("db.baseUrl");
+        jdbcMysqlUsername = manager.properties().getProperty("db.username");
+        jdbcMysqlPassword = manager.properties().getProperty("db.password");
     }
 
     public List<ContactData> getContactList() {
         var contacts = new ArrayList<ContactData>();
-        try (var conn = DriverManager.getConnection("jdbc:mysql://localhost/addressbook",
-                "root",
-                "");
+        try (var conn = DriverManager.getConnection(jdbcMysqlUrl, jdbcMysqlUsername, jdbcMysqlPassword);
              var statement = conn.createStatement();
              var result = statement.executeQuery(
-                     "SELECT id, firstname, middlename, lastname, nickname, title, company, address, mobile, email FROM addressbook;")) {
+                     "SELECT id, firstname, middlename, lastname, nickname, title, company, address, mobile, email, photo FROM addressbook;")) {
             while (result.next()) {
                 contacts.add(new ContactData()
                         .withId(result.getString("id"))
@@ -28,7 +33,8 @@ public class JdbcHelper extends HelperBase {
                         .withLastName(result.getString("lastname"))
                         .withAddress(result.getString("address"))
                         .withMobile(result.getString("mobile"))
-                        .withEmail(result.getString("email")));
+                        .withEmail(result.getString("email"))
+                        .withPhoto(result.getString("photo")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -38,9 +44,7 @@ public class JdbcHelper extends HelperBase {
 
     public List<GroupData> getGroupList() {
         var groups = new ArrayList<GroupData>();
-        try (var conn = DriverManager.getConnection("jdbc:mysql://localhost/addressbook",
-                "root",
-                "");
+        try (var conn = DriverManager.getConnection(jdbcMysqlUrl, jdbcMysqlUsername, jdbcMysqlPassword);
              var statement = conn.createStatement();
              var result = statement.executeQuery("SELECT group_id, group_name, group_header, group_footer FROM group_list;")) {
             while (result.next()) {

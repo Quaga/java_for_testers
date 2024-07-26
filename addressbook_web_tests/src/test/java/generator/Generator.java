@@ -10,10 +10,7 @@ import common.CommonFunctions;
 import model.ContactData;
 import model.GroupData;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -58,14 +55,15 @@ public class Generator {
         var contacts = new ArrayList<ContactData>();
         for (int i = 1; i <= count; i++) {
             contacts.add(new ContactData()
-                    .withFirstName(CommonFunctions.randomString(i * 2))
-                    .withLastName(CommonFunctions.randomString(i * 3))
-                    .withAddress(CommonFunctions.randomString(i * 5))
-                    .withMobile(CommonFunctions.randomString(i * 3))
-                    .withEmail(String.format("%s@%s.ru",
-                            CommonFunctions.randomString(i * 4),
-                            CommonFunctions.randomString(i * 2)))
-                    .withPhoto(CommonFunctions.randomFile(properties.getProperty("file.photoDir"))));
+//                    .withFirstName(CommonFunctions.randomString(i * 2))
+//                    .withLastName(CommonFunctions.randomString(i * 3))
+//                    .withAddress(CommonFunctions.randomString(i * 5))
+//                    .withMobile(CommonFunctions.randomString(i * 3))
+//                    .withEmail(String.format("%s@%s.ru",
+//                            CommonFunctions.randomString(i * 4),
+//                            CommonFunctions.randomString(i * 2)))
+//                    .withPhoto(CommonFunctions.randomFile(properties.getProperty("file.photoDir"))));
+                    .withRandomData(i, properties.getProperty("file.photoDir")));
         }
         return contacts;
     }
@@ -73,10 +71,7 @@ public class Generator {
     private Object generateGroups() {
         var groups = new ArrayList<GroupData>();
         for (int i = 1; i <= count; i++) {
-            groups.add(new GroupData()
-                    .withName(CommonFunctions.randomString(i * 3))
-                    .withHeader(CommonFunctions.randomString(i * 3))
-                    .withFooter(CommonFunctions.randomString(i * 3)));
+            groups.add(new GroupData().withRandomData(i));
         }
         return groups;
     }
