@@ -137,29 +137,30 @@ public class HibernateHelper extends HelperBase  {
     }
 
     static List<ContactData> convertContactList(List<ContactRecord> records) {
-        List<ContactData> result = new ArrayList<>();
-        for (var record : records) {
-            result.add(convert(record));
-        }
-        return result;
+        return records.stream().map(HibernateHelper::convert).collect(Collectors.toList());
     }
 
     static List<GroupData> convertGroupList(List<GroupRecord> records) {
-        List<GroupData> result = new ArrayList<>();
-        for (var record : records) {
-            result.add(convert(record));
-        }
-        return result;
+        return records.stream().map(HibernateHelper::convert).collect(Collectors.toList());
     }
 
     private static ContactData convert(ContactRecord record) {
         return new ContactData().withId("" + record.id)
                 .withFirstName(record.firstname)
                 .withLastName(record.lastname)
+                .withNickname(record.nickname)
+                .withTitle(record.title)
+                .withCompany(record.company)
                 .withAddress(record.address)
                 .withMobile(record.mobile)
                 .withEmail(record.email)
-                .withPhoto(record.photo);
+                .withPhoto(record.photo)
+                .withWorkphone(record.work)
+                .withHomephone(record.home)
+                .withEmail2(record.email2)
+                .withEmail3(record.email3)
+                .withPhone2(record.phone2);
+
     }
 
     private static ContactRecord convert(ContactData data) throws IOException, SQLException {
@@ -202,8 +203,12 @@ public class HibernateHelper extends HelperBase  {
         }
         
         var result = new ContactRecord(Integer.parseInt(id),
+                data.middlename(),
                 data.lastName(),
                 data.firstName(),
+                data.nickname(),
+                data.title(),
+                data.company(),
                 data.address(),
                 data.mobile(),
                 data.email(),

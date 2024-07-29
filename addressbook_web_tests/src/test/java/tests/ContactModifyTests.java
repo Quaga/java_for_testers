@@ -30,10 +30,19 @@ public class ContactModifyTests extends TestBase{
         expectedList.set(index, testData.withId(oldContacts.get(index).id()));
         expectedList.set(index, testData
                 .withId(oldContacts.get(index).id())
+                .withNickname(oldContacts.get(index).nickname())
+                .withTitle(oldContacts.get(index).title())
+                .withCompany(oldContacts.get(index).company())
                 .withAddress(oldContacts.get(index).address())
                 .withMobile(oldContacts.get(index).mobile())
                 .withEmail(oldContacts.get(index).email())
                 .withPhoto(oldContacts.get(index).photo())
+                .withWorkphone(oldContacts.get(index).workphone())
+                .withHomephone(oldContacts.get(index).homephone())
+                .withEmail2(oldContacts.get(index).email2())
+                .withEmail3(oldContacts.get(index).email3())
+                .withPhone2(oldContacts.get(index).phone2())
+
         );
         Comparator<ContactData> compareById = (o1, o2) -> {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));

@@ -55,14 +55,6 @@ public class Generator {
         var contacts = new ArrayList<ContactData>();
         for (int i = 1; i <= count; i++) {
             contacts.add(new ContactData()
-//                    .withFirstName(CommonFunctions.randomString(i * 2))
-//                    .withLastName(CommonFunctions.randomString(i * 3))
-//                    .withAddress(CommonFunctions.randomString(i * 5))
-//                    .withMobile(CommonFunctions.randomString(i * 3))
-//                    .withEmail(String.format("%s@%s.ru",
-//                            CommonFunctions.randomString(i * 4),
-//                            CommonFunctions.randomString(i * 2)))
-//                    .withPhoto(CommonFunctions.randomFile(properties.getProperty("file.photoDir"))));
                     .withRandomData(i, properties.getProperty("file.photoDir")));
         }
         return contacts;

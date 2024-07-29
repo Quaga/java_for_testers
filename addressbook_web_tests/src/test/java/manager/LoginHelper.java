@@ -8,9 +8,14 @@ public class LoginHelper extends HelperBase{
         super(manager);
     }
 
-    void login(String user, String password) {
+    public void login(String user, String password) {
         type(By.name("user"), user);
         type(By.name("pass"), password);
         click(By.xpath("//input[@value=\'Login\']"));
+    }
+
+    public void close() {
+        click(By.linkText("Logout"));
+        quit();
     }
 }
