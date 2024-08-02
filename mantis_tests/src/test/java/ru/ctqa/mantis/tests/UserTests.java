@@ -4,6 +4,7 @@ import ru.ctqa.mantis.common.CommonFunctions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.ctqa.mantis.model.UserData;
 
 import java.time.Duration;
 import java.util.function.Supplier;
@@ -18,16 +19,18 @@ public class UserTests extends TestBase {
 
     @ParameterizedTest
     @MethodSource("randomUsers")
-    void canRegisterUser(String username) throws InterruptedException {
-        // создать пользователя (адрес) на почтовом сервисе (JamesHelper)
+    void canRegisterUser(String username){
+        // создать пользователя (адрес) на почтовом сервисе (JamesApiHelper)
         var email = String.format("%s@localhost", username);
-        var password = "root";
-        app.jamesCli().addUser(email, password);
+        var password = "password";
+        app.jamesApi().addUser(email, password);
 
-        // заполняем форму создания и отправляем (SessionHelper)
-        app.session().login("administrator", "root");
-        app.session().createUser(username, email);
-        Assertions.assertTrue(app.session().existUser(username, email));
+        // заполняем форму создания и отправляем (RestApiHelper)
+        app.rest().createUser(new UserData()
+                .withUsername(username)
+                .withRealname(username)
+                .withPassword(password)
+                .withEmail(email));
 
         // ждём почту (MailHelper)
         var duration = Duration.ofSeconds(60);

@@ -1,2 +1,8 @@
-rootProject.name = 'mantis_tests'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
 
+rootProject.name = 'mantis_tests'
