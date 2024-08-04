@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import manager.hbm.ContactRecord;
 import manager.hbm.GroupInContact;
 import manager.hbm.GroupRecord;
@@ -40,6 +41,7 @@ public class HibernateHelper extends HelperBase  {
                 .buildSessionFactory();
     }
 
+    @Step
     public void createContact(ContactData contactData) {
         sessionFactory.inSession(session -> {
             session.getTransaction().begin();
@@ -58,6 +60,7 @@ public class HibernateHelper extends HelperBase  {
         });
     }
 
+    @Step
     public void createGroup(GroupData groupData) {
         sessionFactory.inSession(session -> {
             session.getTransaction().begin();
@@ -65,7 +68,8 @@ public class HibernateHelper extends HelperBase  {
             session.getTransaction().commit();
         });
     }
-    
+
+    @Step
     public void addGroupToContact(ContactData contactdata, GroupData groupdata) {
         sessionFactory.inSession(session -> {
             var newGroupInContact = new GroupInContact(Integer.parseInt(contactdata.id()),
@@ -76,12 +80,14 @@ public class HibernateHelper extends HelperBase  {
         });
     }
 
+    @Step
     public long getContactsCount() {
         return sessionFactory.fromSession(session -> {
             return session.createQuery("select count (*) from ContactRecord", Long.class).getSingleResult();
         });
     }
 
+    @Step
     public void removeGroupFromContact(ContactData contactdata, GroupData groupdata) {
         sessionFactory.inSession(session -> {
             var oldGroupInContact = new GroupInContact(Integer.parseInt(contactdata.id()),
@@ -92,18 +98,21 @@ public class HibernateHelper extends HelperBase  {
         });
     }
 
+    @Step
     public long getGroupsCount() {
         return sessionFactory.fromSession(session -> {
             return session.createQuery("select count (*) from GroupRecord", Long.class).getSingleResult();
         });
     }
 
+    @Step
     public List<ContactData> getContactList() {
         return sessionFactory.fromSession(session -> {
             return convertContactList(session.createQuery("from ContactRecord", ContactRecord.class).list());
         });
     }
 
+    @Step
     public List<ContactData> getContactsInGroup(GroupData group) {
         return sessionFactory.fromSession(session -> {
             var result = session.get(GroupRecord.class, group.id()).contacts;
@@ -112,18 +121,21 @@ public class HibernateHelper extends HelperBase  {
         });
     }
 
+    @Step
     public List<GroupData> getGroupList() {
         return sessionFactory.fromSession(session -> {
             return convertGroupList(session.createQuery("from GroupRecord", GroupRecord.class).list());
         });
     }
 
+    @Step
     public long getGroupsInContactCount() {
         return sessionFactory.fromSession(session -> {
             return session.createQuery("select count (distinct(group_id)) from GroupInContact", Long.class).getSingleResult();
         });
     }
 
+    @Step
     public List<GroupData> getGroupsInContact() {
         return sessionFactory.fromSession(session -> {
             var contacts = getContactList();

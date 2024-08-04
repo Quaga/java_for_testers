@@ -34,6 +34,9 @@ public class Generator {
     }
 
     private void run() throws IOException {
+        var pro = System.getProperties();
+        var aa = System.getProperty("target", properties_file);
+        var bb = new FileReader(aa);
         properties = new Properties();
         properties.load(new FileReader(System.getProperty("target", properties_file)));
 
@@ -48,7 +51,7 @@ public class Generator {
 
         var groupData = generateGroups();
         var groupOut = group_file + "." + format;
-        save(groupData, groupOut);
+        //save(groupData, groupOut);
     }
 
     private Object generateContacts() {

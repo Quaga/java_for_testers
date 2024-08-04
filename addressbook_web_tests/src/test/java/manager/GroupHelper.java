@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import model.GroupData;
 import org.openqa.selenium.By;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 public class GroupHelper extends HelperBase{
 
+    @Step
     public void createGroup(GroupData group) {
         openGroupsPage();
         initGroupCreation();
@@ -16,6 +18,7 @@ public class GroupHelper extends HelperBase{
         returnToGroupsPage();
     }
 
+    @Step
     public void removeGroup(GroupData group) {
         openGroupsPage();
         selectGroup(group);
@@ -23,6 +26,7 @@ public class GroupHelper extends HelperBase{
         returnToGroupsPage();
     }
 
+    @Step
     public void modifyGroup(GroupData group, GroupData modifiedGroup) {
         openGroupsPage();
         selectGroup(group);
@@ -37,7 +41,7 @@ public class GroupHelper extends HelperBase{
     }
 
     public void openGroupsPage() {
-        if (! manager.isElementPresent(By.name("new")))
+        //if (! manager.isElementPresent(By.name("new")))
             click(By.linkText("groups"));
     }
 
@@ -70,6 +74,10 @@ public class GroupHelper extends HelperBase{
         type(By.name("group_name"), group.name());
         type(By.name("group_header"), group.header());
         type(By.name("group_footer"), group.footer());
+    }
+
+    private void fillGroupName(GroupData group) {
+        type(By.name("group_name"), group.name());
     }
 
     private void initGroupModification() {

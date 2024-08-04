@@ -1,5 +1,6 @@
 package manager;
 
+import io.qameta.allure.Step;
 import model.ContactData;
 import model.GroupData;
 import org.openqa.selenium.By;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 public class ContactHelper extends HelperBase{
 
+    @Step
     public void createContact(ContactData contact) {
         openContactsCreationPage();
         fillContactForm(contact);
@@ -20,6 +22,7 @@ public class ContactHelper extends HelperBase{
         openContactsPage();
     }
 
+    @Step
     public void createContact(ContactData contact, GroupData group) {
         openContactsCreationPage();
         fillContactForm(contact);
@@ -36,6 +39,7 @@ public class ContactHelper extends HelperBase{
         click(By.name("to_group"), By.cssSelector(String.format("option[value='%s']", group.id())));
     }
 
+    @Step
     public void removeContact(ContactData contact) {
         openContactsPage();
         selectContact(contact);
@@ -43,6 +47,7 @@ public class ContactHelper extends HelperBase{
         openContactsPage();
     }
 
+    @Step
     public void modifyContact(ContactData contact, ContactData modifiedContact) {
         openContactsPage();
         selectContact(contact);
@@ -52,6 +57,7 @@ public class ContactHelper extends HelperBase{
         openContactsPage();
     }
 
+    @Step
     public void modifyContact(ContactData contact, GroupData group) {
         openContactsPage();
         selectContact(contact);
@@ -96,6 +102,7 @@ public class ContactHelper extends HelperBase{
 
     private void fillContactForm(ContactData contact) {
         type(By.name("firstname"), contact.firstName());
+        type(By.name("middlename"), contact.middlename());
         type(By.name("lastname"), contact.lastName());
         type(By.name("nickname"), contact.nickname());
         type(By.name("title"), contact.title());
@@ -125,6 +132,7 @@ public class ContactHelper extends HelperBase{
         return manager.driver.findElements(By.name("selected[]")).size();
     }
 
+    @Step
     public void removeGroupFromContact(ContactData contact, GroupData group) {
         openContactsPage();
         selectContactByGroup(group);
@@ -141,6 +149,7 @@ public class ContactHelper extends HelperBase{
         click(By.name("remove"));
     }
 
+    @Step
     public List<ContactData> getList() {
         openContactsPage();
         var contacts = new ArrayList<ContactData>();
@@ -158,6 +167,7 @@ public class ContactHelper extends HelperBase{
         return contacts;
     }
 
+    @Step
     public Map<String, String> getPhones() {
         var result = new HashMap<String, String>();
         List<WebElement> rows = manager.driver.findElements(By.name("entry"));
@@ -169,6 +179,7 @@ public class ContactHelper extends HelperBase{
         return result;
     }
 
+    @Step
     public Map<String, String> getEmails() {
         var result = new HashMap<String, String>();
         List<WebElement> rows = manager.driver.findElements(By.name("entry"));
@@ -180,6 +191,7 @@ public class ContactHelper extends HelperBase{
         return result;
     }
 
+    @Step
     public Map<String, String> getAddress() {
         var result = new HashMap<String, String>();
         List<WebElement> rows = manager.driver.findElements(By.name("entry"));

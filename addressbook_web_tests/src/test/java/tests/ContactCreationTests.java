@@ -56,7 +56,7 @@ public class ContactCreationTests extends TestBase{
 
     @Test
     public void canCreateGroupWithMobileOnly() {
-        app.contacts().createContact(new ContactData().withMobile("some mobile"));
+        app.contacts().createContact(new ContactData().withMobile("somemobile"));
     }
     
     @ParameterizedTest

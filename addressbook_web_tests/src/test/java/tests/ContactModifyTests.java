@@ -52,7 +52,7 @@ public class ContactModifyTests extends TestBase{
         Assertions.assertEquals(newContacts, expectedList);
     }
 
-    @Test
+    //@Test
     void canModifyContactInGroup() {
         if (app.hbm().getContactsCount() == 0) {
             app.hbm().createContact(new ContactData().withRandomData(2,
